@@ -116,56 +116,6 @@ jobs:
       BASH_ENV: /Users/distiller/repo/.circleci/.bashrc_macOS
 
 
-  deploy:
-    docker:
-      - image: circleci/python:3.6-jessie
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      - run:
-          name: Install dependencies
-          command: |
-            python -m virtualenv env
-            . env/bin/activate
-            pip install -r requirements.txt
-
-      - run:
-          name: Install twine
-          command: |
-            . env/bin/activate
-            pip install twine
-
-      - run:
-          name: Verify version matches tag
-          command: |
-            . env/bin/activate
-            pip install .
-            echo $CIRCLE_TAG
-            [[ "$(pip show dwave-networkx 2>/dev/null | grep Version)" == "Version: $CIRCLE_TAG" ]]
-
-      - run:
-          name: Initialize .pypirc
-          command: |
-            echo -e "[pypi]" >> ~/.pypirc
-            echo -e "username = $PYPI_USERNAME" >> ~/.pypirc
-            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
-
-      - run:
-          name: Build sdist and bdist
-          command: |
-            . env/bin/activate
-            python setup.py sdist
-            python setup.py bdist_wheel
-
-      - run:
-          name: Upload
-          command: |
-            . env/bin/activate
-            twine upload dist/*
-
 workflows:
   version: 2
   tests:
@@ -178,12 +128,3 @@ workflows:
       - test-osx-3.6
       - test-osx-3.5
       - test-osx-2.7
-
-  deploy:
-    jobs:
-      - deploy:
-          filters:
-            tags:
-              only: /^[0-9]+(\.[0-9]+)*(\.dev([0-9]+)?)?$/
-            branches:
-              ignore: /.*/
