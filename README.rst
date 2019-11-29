@@ -110,5 +110,5 @@ Comments on the printed result:
 
 License
 -------
-Released under the Apache License 2.0. See `LICENSE <../LICENSE>`_ file.
+Released under the Apache License 2.0. See `LICENSE <./LICENSE>`_ file.
 
