@@ -5,6 +5,7 @@ Getting the D-Wave quantum computer to solve a maze!
 The following code takes a simple and familiar problem---solving a maze---and
 demonstrates the steps of submitting such problems to the quantum computer.
 ::
+
   #|#######
   #._._. .#
   #  # |  #
@@ -66,7 +67,7 @@ Note that the code only accepts edge inputs in the north direction
 (``'<row>,<col>n'``) and the west direction (``'<row>,<col>w'``). Edges in
 south or east directions can be restated as edges in north and west directions:
 
-.. code-block:: none
+.. code-block::
 
   '<row>,<col>s' == '<row+1>,<col>n'
   '<row>,<col>e' == '<row>,<col+1>w'
@@ -82,6 +83,7 @@ Consider the following 2 by 2 maze with
 This can be visualized as the following maze. Note that the periods (`.`) act
 as gridpoints, which means that the maze below has 2 rows and 2 columns.
 ::
+
   #|###	    <-- start location (`'0,0n'`); the path "north" of coordinate `0,0`
   #. .#
   #  ##     <-- wall (`'1,1n'`); blocks the path "north" of coordinate `1,1`
@@ -91,6 +93,7 @@ as gridpoints, which means that the maze below has 2 rows and 2 columns.
 When running the demo code and submitting this problem, the following result
 would be produced:
 ::
+
   #|###
   #. .#
   #| ##
