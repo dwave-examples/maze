@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  win: circleci/windows@2.2.0
+
 jobs:
   #
   # linux
@@ -72,10 +75,10 @@ jobs:
       # Install desired python version
       - restore_cache:
           keys:
-            - pyenv-{{ .Environment.CIRCLE_JOB }}
+            - pyenv-{{ .Environment.CIRCLE_JOB }}-xcode-11.2.1
       - run: pyenv install $PYTHON -s
       - save_cache:
-          key: pyenv-{{ .Environment.CIRCLE_JOB }}
+          key: pyenv-{{ .Environment.CIRCLE_JOB }}-xcode-11.2.1
           paths:
             - ~/.pyenv
 
@@ -126,17 +129,71 @@ jobs:
       HOMEBREW_NO_AUTO_UPDATE: 1
       BASH_ENV: /Users/distiller/repo/.circleci/.bashrc_macOS
 
+  #
+  # Windows
+  #
+
+  test-win-py38: &win-tests-template
+    executor:
+      name: win/default
+
+    environment:
+      PYTHON: 3.8.0
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install python and create virtualenv
+          command: |
+            nuget install python -Version $env:PYTHON -ExcludeVersion -OutputDirectory .
+            .\python\tools\python.exe --version
+            .\python\tools\python.exe -m pip install virtualenv
+            .\python\tools\python.exe -m virtualenv env
+      - run:
+          name: install dependencies
+          command: |
+            env\Scripts\activate.ps1
+            python --version
+            pip install -r requirements.txt
+            pip install coverage
+      - run: 
+          name: run unittests
+          command: |
+            env\Scripts\activate.ps1
+            coverage run -m unittest discover
+
+  test-win-py37:
+    <<: *win-tests-template
+    environment:
+      PYTHON: 3.7.5
+
+  test-win-py36:
+    <<: *win-tests-template
+    environment:
+      PYTHON: 3.6.8
+
+  test-win-py35:
+    <<: *win-tests-template
+    environment:
+      PYTHON: 3.5.4
 
 # TODO: add Py3.8 in jobs once ortools (for penaltymodel-mip) supports Py3.8
 workflows:
-  version: 2
+  version: 2.1
   tests:
     jobs:
-      - test-py37
-      - test-py36
-      - test-py35
-      - test-py27
-      - test-osx-py37
-      - test-osx-py36
-      - test-osx-py35
-      - test-osx-py27
+      # - test-py37
+      # - test-py36
+      # - test-py35
+      # - test-py27
+      # - test-osx-py37
+      # - test-osx-py36
+      # - test-osx-py35
+      # - test-osx-py27
+      - test-win-py37
+      - test-win-py36
+      - test-win-py35
+
