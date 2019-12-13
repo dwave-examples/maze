@@ -1,11 +1,11 @@
-version: 2
+version: 2.1
 
 jobs:
   #
   # linux
   #
 
-  test-3.8: &full-test-template
+  test-py38: &full-test-template
     docker:
       - image: circleci/python:3.8-buster
 
@@ -29,22 +29,22 @@ jobs:
 
       - run: env/bin/coverage run -m unittest discover
 
-  test-3.7:
+  test-py37:
     <<: *full-test-template
     docker:
       - image: circleci/python:3.7-stretch
 
-  test-3.6:
+  test-py36:
     <<: *full-test-template
     docker:
       - image: circleci/python:3.6-jessie
 
-  test-3.5:
+  test-py35:
     <<: *full-test-template
     docker:
       - image: circleci/python:3.5-jessie
 
-  test-2.7:
+  test-py27:
     # Note: CircleCI's Python 2.7 environment already has virtualenv pre-installed.
     #   Hence, even though it's Python 2.7, `python -m virtualenv ..` works.
     <<: *full-test-template
@@ -55,7 +55,7 @@ jobs:
   # macOS
   #
 
-  test-osx-3.8: &osx-tests-template
+  test-osx-py38: &osx-tests-template
     macos:
       xcode: "11.2.1"
     environment:
@@ -100,26 +100,26 @@ jobs:
       - run: env/bin/coverage run -m unittest discover
 
 
-  test-osx-3.7:
+  test-osx-py37:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.7.0
       HOMEBREW_NO_AUTO_UPDATE: 1
 
-  test-osx-3.6:
+  test-osx-py36:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.6.5
       HOMEBREW_NO_AUTO_UPDATE: 1
 
-  test-osx-3.5:
+  test-osx-py35:
     <<: *osx-tests-template
     environment:
       PYTHON: 3.5.5
       HOMEBREW_NO_AUTO_UPDATE: 1
       BASH_ENV: /Users/distiller/repo/.circleci/.bashrc_macOS
 
-  test-osx-2.7:
+  test-osx-py27:
     <<: *osx-tests-template
     environment:
       PYTHON: 2.7.15
@@ -127,15 +127,16 @@ jobs:
       BASH_ENV: /Users/distiller/repo/.circleci/.bashrc_macOS
 
 
+# TODO: add Py3.8 in jobs once ortools (for penaltymodel-mip) supports Py3.8
 workflows:
   version: 2
   tests:
     jobs:
-      - test-3.7
-      - test-3.6
-      - test-3.5
-      - test-2.7
-      - test-osx-3.7
-      - test-osx-3.6
-      - test-osx-3.5
-      - test-osx-2.7
+      - test-py37
+      - test-py36
+      - test-py35
+      - test-py27
+      - test-osx-py37
+      - test-osx-py36
+      - test-osx-py35
+      - test-osx-py27
