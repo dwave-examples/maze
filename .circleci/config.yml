@@ -152,14 +152,14 @@ jobs:
             .\python\tools\python.exe --version
             .\python\tools\python.exe -m pip install virtualenv
             .\python\tools\python.exe -m virtualenv env
-      - run:
+      - run: &win-install-dependencies-template
           name: install dependencies
           command: |
             env\Scripts\activate.ps1
             python --version
             pip install -r requirements.txt
             pip install coverage
-      - run: 
+      - run: &win-run-unittests-template
           name: run unittests
           command: |
             env\Scripts\activate.ps1
@@ -180,6 +180,48 @@ jobs:
     environment:
       PYTHON: 3.5.4
 
+  #
+  # Windows x86
+  #
+
+  test-win-py38x86: &win-tests-template-x86
+    executor:
+      name: win/default
+
+    environment:
+      PYTHON: 3.8.0
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install python and create virtualenv
+          command: |
+            nuget install pythonx86 -Version $env:PYTHON -ExcludeVersion -OutputDirectory .
+            .\pythonx86\tools\python.exe --version
+            .\pythonx86\tools\python.exe -m pip install virtualenv
+            .\pythonx86\tools\python.exe -m virtualenv env
+      - run: *win-install-dependencies-template
+      - run: *win-run-unittests-template
+
+  test-win-py37x86:
+    <<: *win-tests-template
+    environment:
+      PYTHON: 3.7.5
+
+  test-win-py36x86:
+    <<: *win-tests-template
+    environment:
+      PYTHON: 3.6.8
+
+  test-win-py35x86:
+    <<: *win-tests-template
+    environment:
+      PYTHON: 3.5.4
+
+
 # TODO: add Py3.8 in jobs once ortools (for penaltymodel-mip) supports Py3.8
 workflows:
   version: 2.1
@@ -196,4 +238,7 @@ workflows:
       - test-win-py37
       - test-win-py36
       - test-win-py35
+      - test-win-py37x86
+      - test-win-py36x86
+      - test-win-py35x86
 
