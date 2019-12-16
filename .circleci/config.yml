@@ -130,7 +130,7 @@ jobs:
       BASH_ENV: /Users/distiller/repo/.circleci/.bashrc_macOS
 
   #
-  # Windows
+  # Windows x64
   #
 
   test-win-py38: &win-tests-template
@@ -227,14 +227,14 @@ workflows:
   version: 2.1
   tests:
     jobs:
-      # - test-py37
-      # - test-py36
-      # - test-py35
-      # - test-py27
-      # - test-osx-py37
-      # - test-osx-py36
-      # - test-osx-py35
-      # - test-osx-py27
+      - test-py37
+      - test-py36
+      - test-py35
+      - test-py27
+      - test-osx-py37
+      - test-osx-py36
+      - test-osx-py35
+      - test-osx-py27
       - test-win-py37
       - test-win-py36
       - test-win-py35
