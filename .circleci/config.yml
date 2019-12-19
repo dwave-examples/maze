@@ -217,14 +217,35 @@ jobs:
     steps:
       - checkout
 
+      # Install python
+      - restore_cache:
+          key: nuget-{{ .Environment.CIRCLE_JOB }}
       - run:
-          name: install python and create virtualenv
+          name: install python
+          command: nuget install pythonx86 -Version $env:PYTHON -ExcludeVersion -OutputDirectory .
+      - save_cache:
+          key: nuget-{{ .Environment.CIRCLE_JOB }}
+          paths:
+            - .\python
+
+      # Set up virtual environment
+      - run:
+          name: create virtualenv
           command: |
-            nuget install pythonx86 -Version $env:PYTHON -ExcludeVersion -OutputDirectory .
             .\pythonx86\tools\python.exe --version
             .\pythonx86\tools\python.exe -m pip install virtualenv
             .\pythonx86\tools\python.exe -m virtualenv env
+
+      # Install requirements
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
       - run: *win-install-dependencies-template
+      - save_cache:
+          key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
+          paths:
+            - env
+
+      # Run tests
       - run: *win-run-unittests-template
 
   test-win-py37x86:
