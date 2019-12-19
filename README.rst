@@ -2,9 +2,9 @@
     :target: https://circleci.com/gh/dwave-examples/maze
     :alt: Linux/Mac build status
 
-====================
-Demo of Maze Solving
-====================
+====
+Maze
+====
 Getting the D-Wave quantum computer to solve a maze!
 
 The following code takes a simple and familiar problem---solving a maze---and
