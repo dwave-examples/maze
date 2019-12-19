@@ -152,6 +152,9 @@ jobs:
             .\python\tools\python.exe --version
             .\python\tools\python.exe -m pip install virtualenv
             .\python\tools\python.exe -m virtualenv env
+
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
       - run: &win-install-dependencies-template
           name: install dependencies
           command: |
@@ -159,6 +162,11 @@ jobs:
             python --version
             pip install -r requirements.txt
             pip install coverage
+      - save_cache:
+          key: v1-dependencies-{{ checksum "requirements.txt" }}-{{ .Environment.CIRCLE_JOB }}
+          paths:
+            - env
+
       - run: &win-run-unittests-template
           name: run unittests
           command: |
