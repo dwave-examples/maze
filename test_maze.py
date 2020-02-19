@@ -18,12 +18,8 @@ import sys
 import unittest
 
 from dimod import BinaryQuadraticModel
-if sys.version_info >= (3,):
-    from unittest.mock import patch
-    from io import StringIO
-else:
-    from mock import patch
-    from StringIO import StringIO
+from unittest.mock import patch
+from io import StringIO
 
 from maze import Maze, get_label, get_maze_bqm
 from neal import SimulatedAnnealingSampler
