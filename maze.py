@@ -191,7 +191,7 @@ class Maze:
                 continue
 
             # Add a penalty to every tile of the path
-            bqm.add_variable(v, penalty_per_tile, dwavebinarycsp.BINARY)
+            bqm.add_variable(v, penalty_per_tile)
 
         return bqm
 
