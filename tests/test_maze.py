@@ -46,8 +46,22 @@ def fill_with_zeros(solution_dict, n_rows, n_cols, ignore_list=None):
 
 
 def get_energy(solution_dict, bqm):
+    """Returns minimum possible energy over all possible auxiliary
+     configurations.
+    """
     min_energy = float('inf')
     aux_variables = [v for v in bqm.variables if re.match(r'aux\d+$', v)]
+
+    # Filter out irrelevant variables in solution_dict
+    # Note: some solution_dict keys may not contribute to the bqm at all, hence
+    #   we need to filter them out before applying `bqm.energy(..)`
+    irrelevant_variables = set(solution_dict.keys()) - set(bqm.variables)
+    for v in irrelevant_variables:
+        if solution_dict[v] == 0:
+            del solution_dict[v]
+        else:
+            raise RuntimeError(
+                "Input solution contains a nonzero var, therefore it is impossible for it to contribute to energy.")
 
     # Try all possible values of auxiliary variables
     for aux_values in itertools.product([0, 1], repeat=len(aux_variables)):
