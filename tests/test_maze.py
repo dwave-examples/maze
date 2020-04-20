@@ -58,9 +58,9 @@ def get_energy(solution_dict, bqm):
     irrelevant_variables = set(solution_dict.keys()) - set(bqm.variables)
     for v in irrelevant_variables:
         if solution_dict[v]:
-            raise RuntimeError(
-                "The variable, {}, has a nonzero expected value,".format(v),
-                "yet does not exist in the submitted BQM")
+            raise RuntimeError(("The variable, '{}', has a nonzero expected "
+                                "value, yet does not exist in the submitted "
+                                "BQM").format(v))
 
         # Safely delete non-contributing variable
         del solution_dict[v]
