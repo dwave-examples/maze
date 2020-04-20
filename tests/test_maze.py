@@ -57,11 +57,13 @@ def get_energy(solution_dict, bqm):
     #   we need to filter them out before applying `bqm.energy(..)`
     irrelevant_variables = set(solution_dict.keys()) - set(bqm.variables)
     for v in irrelevant_variables:
-        if solution_dict[v] == 0:
-            del solution_dict[v]
-        else:
+        if solution_dict[v]:
             raise RuntimeError(
-                "Input solution contains a nonzero var, therefore it is impossible for it to contribute to energy.")
+                "The variable, {}, has a nonzero expected value,".format(v),
+                "yet does not exist in the submitted BQM")
+
+        # Safely delete non-contributing variable
+        del solution_dict[v]
 
     # Try all possible values of auxiliary variables
     for aux_values in itertools.product([0, 1], repeat=len(aux_variables)):
