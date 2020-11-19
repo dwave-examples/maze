@@ -307,13 +307,12 @@ class TestMazeSolverResponse(unittest.TestCase):
         # Sample and test that a response is given
         sampler = SimulatedAnnealingSampler()
         response = sampler.sample(bqm, num_reads=1000)
-        response_sample = next(response.samples())
         self.assertGreaterEqual(len(response), 1)
 
         # Test heuristic response
         expected_solution = {'0,1w': 1, '1,1n': 1, '1,1w': 1, '2,0n': 1, '2,1w': 1, '2,2w': 1}
         fill_with_zeros(expected_solution, n_rows, n_cols, [start, end])
-        self.compare(response_sample, expected_solution)
+        self.compare(response.first.sample, expected_solution)
 
 
 class TestGetMazeBqm(unittest.TestCase):
