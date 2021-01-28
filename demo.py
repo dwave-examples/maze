@@ -31,7 +31,10 @@ bqm = m.get_bqm()
 
 # Submit BQM to a D-Wave sampler
 sampler = EmbeddingComposite(DWaveSampler())
-result = sampler.sample(bqm, num_reads=1000, chain_strength=2)
+result = sampler.sample(bqm,
+                        num_reads=1000,
+                        chain_strength=2,
+                        label='Example - Maze')
 
 # Interpret result
 # Note: when grabbing the path, we are only grabbing path segments that have
