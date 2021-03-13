@@ -28,7 +28,7 @@ class IntegrationTests(unittest.TestCase):
         if os.getenv('DEBUG_OUTPUT'):
             print("Example output \n" + output)
 
-        with self.subTest(msg="Verify if output contains '0,1w':' \n"):
+        with self.subTest(msg="Verify if output contains \"'0,1w':\" \n"):
             self.assertIn("'0,1w':".upper(), output)
         with self.subTest(msg="Verify if error string contains in output \n"):
             self.assertNotIn("ERROR", output)
