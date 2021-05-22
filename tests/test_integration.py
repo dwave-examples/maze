@@ -20,7 +20,7 @@ import sys
 project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 class IntegrationTests(unittest.TestCase):
-
+    @unittest.skipIf(os.getenv('SKIP_INT_TESTS'), "Skipping integration test.")
     def test_maze(self):
         demo_file = os.path.join(project_dir, 'demo.py')
         output = subprocess.check_output([sys.executable, demo_file])
